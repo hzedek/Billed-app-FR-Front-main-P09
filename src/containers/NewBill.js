@@ -16,16 +16,21 @@ export default class NewBill {
     new Logout({ document, localStorage, onNavigate })
   }
   handleChangeFile = e => {
-    e.preventDefault()
+    
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
-    const filePath = e.target.value.split(/\\/g)
-    const fileName = filePath[filePath.length-1]
-    const formData = new FormData()
-    const email = JSON.parse(localStorage.getItem("user")).email
-    formData.append('file', file)
-    formData.append('email', email)
-
-    this.store
+    const fileInput = this.document.querySelector(`input[data-testid="file"]`)
+      // Liste des types de fichiers acceptés
+      const acceptedTypes = ['image/jpeg', 'image/png','image/jpg'];
+      // Vérifier si le type de fichier est accepté
+      if (acceptedTypes.includes(file.type)) {
+        console.log('Fichier accepté. Type de fichier:', file.type);
+        const filePath = e.target.value.split(/\\/g)
+        const fileName = filePath[filePath.length-1]
+        const formData = new FormData()
+        const email = JSON.parse(localStorage.getItem("user")).email
+        formData.append('file', file)
+        formData.append('email', email)
+        this.store
       .bills()
       .create({
         data: formData,
@@ -39,6 +44,11 @@ export default class NewBill {
         this.fileUrl = fileUrl
         this.fileName = fileName
       }).catch(error => console.error(error))
+      } else {
+        console.log('Type de fichier non pris en charge. Veuillez sélectionner un fichier JPEG ou PNG.');
+        // Ajoutez ici le code pour informer l'utilisateur du type de fichier non pris en charge
+        fileInput.value = ""
+      }
   }
   handleSubmit = e => {
     e.preventDefault()
@@ -57,6 +67,7 @@ export default class NewBill {
       fileName: this.fileName,
       status: 'pending'
     }
+    console.log(bill);
     this.updateBill(bill)
     this.onNavigate(ROUTES_PATH['Bills'])
   }

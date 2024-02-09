@@ -117,3 +117,13 @@
   cursor: pointer;
 }
 
+.image-container{
+  text-align: center;
+  overflow: hidden;
+  width: 100%;
+}
+.image-container img{
+  width: 100%;
+  height: 100%;  
+  object-fit: fill
+}
