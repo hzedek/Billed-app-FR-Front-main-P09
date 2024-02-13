@@ -85,9 +85,9 @@ export default class {
   }
 
   handleEditTicket(e, bill, bills) {
+    e.preventDefault();
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
-    if (this.counter % 2 === 0) {
       bills.forEach(b => { 
 
         $(`#open-bill${b.id}`).css({ background: '#0D5AE5' })
@@ -96,21 +96,14 @@ export default class {
       $('.dashboard-right-container div').html(DashboardFormUI(bill))
       $('.vertical-navbar').css({ height: '150vh' })
       this.counter ++
-    } else {
-      $(`#open-bill${bill.id}`).css({ background: '#0D5AE5' })
-
-      $('.dashboard-right-container div').html(`
-        <div id="big-billed-icon" data-testid="big-billed-icon"> ${BigBilledIcon} </div>
-      `)
-      $('.vertical-navbar').css({ height: '120vh' })
-      this.counter ++
-    }
+     
     $('#icon-eye-d').click(() => this.handleClickIconEye())
     $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
     $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
   }
 
   handleAcceptSubmit = (e, bill) => {
+    e.preventDefault();
     const newBill = {
       ...bill,
       status: 'accepted',
@@ -121,6 +114,7 @@ export default class {
   }
 
   handleRefuseSubmit = (e, bill) => {
+    e.preventDefault();
     const newBill = {
       ...bill,
       status: 'refused',
@@ -131,6 +125,7 @@ export default class {
   }
 
   handleShowTickets(e, bills, index) {
+    e.preventDefault();
     if (this.counter === undefined || this.index !== index) this.counter = 0
     if (this.index === undefined || this.index !== index) this.index = index
     if (this.counter % 2 === 0) {
@@ -144,7 +139,6 @@ export default class {
         .html("")
       this.counter ++
     }
-
     bills.forEach(bill => {
       $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })
@@ -163,9 +157,10 @@ export default class {
         .map(doc => ({
           id: doc.id,
           ...doc,
-          date: doc.date,
+          date:doc.date,
           status: doc.status
         }))
+
         return bills
       })
       .catch(error => {
