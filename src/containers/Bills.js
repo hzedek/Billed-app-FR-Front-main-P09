@@ -33,6 +33,7 @@ export default class {
       .bills()
       .list()
       .then(snapshot => {
+          console.log(snapshot);
         const bills = snapshot
           .map(doc => { 
             try {
@@ -53,9 +54,6 @@ export default class {
             }
           })
           console.log('length', bills.length)
-          // Trier les factures par date décroissante
-        bills.sort((a, b) => b.date - a.date);
-        console.log(bills);
         return bills;
       })
     }
