@@ -135,6 +135,7 @@ describe("Given I am connected as an Employee", () => {
 				vat: "70",
 				percentage: 20,
 				commentary: "ok",
+				file:""
 			};
 
 			const selectElement = screen.getByTestId("expense-type");
@@ -144,6 +145,7 @@ describe("Given I am connected as an Employee", () => {
 			const vatInput = screen.getByTestId("vat");
 			const percentageInput = screen.getByTestId("pct");
 			const commentInput = screen.getByTestId("commentary");
+			const fileInput = screen.getByTestId('file');
 
 			selectElement.value = testData.expenseType;
 			expenditureInput.value = testData.expenseName;
@@ -152,6 +154,8 @@ describe("Given I am connected as an Employee", () => {
 			vatInput.value = testData.vat;
 			percentageInput.value = 10;
 			commentInput.value = testData.commentary;
+			fileInput.value = testData.file
+
 
 			fireEvent.submit(form);
 

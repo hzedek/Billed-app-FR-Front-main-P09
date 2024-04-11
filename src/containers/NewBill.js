@@ -14,22 +14,15 @@ export default class NewBill {
     this.fileName = null
     this.billId = null
     new Logout({ document, localStorage, onNavigate })
-
-    this.formats = ["image/png", "image/jpg", "image/jpeg"]
   }
   handleChangeFile = e => {
     e.preventDefault()
 
     /** @type {HTMLInputElement} */
     const inputFile = this.document.querySelector(`input[data-testid="file"]`)
+    const acceptedTypes = ['image/jpeg', 'image/png','image/jpg'];
 
-    const file = inputFile.files[0]
-
-    if (!this.formats.includes(file?.type)) {
-      inputFile.setAttribute('data-error', 'Le fichier n\'est pas une image ou a une extension non autorisée.')
-      inputFile.setAttribute('data-error-visible', 'true')
-      return;
-    }
+    const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     inputFile.setAttribute('data-error', '')
     inputFile.setAttribute('data-error-visible', 'false')
 
@@ -40,7 +33,9 @@ export default class NewBill {
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)
     formData.append('email', email)
-
+    if (acceptedTypes.includes(file.type)) {
+      console.log('Fichier accepté. Type de fichier:', file.type);
+      console.log(file.type);
     this.store
       .bills()
       .create({
@@ -54,7 +49,14 @@ export default class NewBill {
         this.billId = key
         this.fileUrl = fileUrl
         this.fileName = fileName
-      }).catch(error => console.error(error))
+      }).catch(error => console.error(error))}
+      else{
+        inputFile.setAttribute('data-error', 'Le fichier n\'est pas une image ou a une extension non autorisée.')
+        inputFile.setAttribute('data-error-visible', 'true')
+        console.log('Type de fichier non pris en charge. Veuillez sélectionner un fichier JPEG ou PNG.');
+        inputFile.value=""
+        return;
+      }
   }
   handleSubmit = e => {
     e.preventDefault()

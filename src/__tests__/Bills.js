@@ -32,9 +32,12 @@ describe("Given I am connected as an employee", () => {
       window.onNavigate(ROUTES_PATH.Bills);
       await waitFor(() => screen.getByTestId("icon-window"));
       const windowIcon = screen.getByTestId("icon-window");
+
       //to-do write expect expression
+
       expect(windowIcon.classList.value).toMatch("active-icon");
         });
+        
     test("Then bills should be ordered from earliest to latest", () => {
       document.body.innerHTML = BillsUI({ data: bills });
       const dates = screen
@@ -47,6 +50,8 @@ describe("Given I am connected as an employee", () => {
 
       expect(dates).toEqual(datesSorted);
     });
+
+
   describe("Given the bills container is initialized", () => {
     test("When i click on new bill button, form bill modal open", () => {
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
