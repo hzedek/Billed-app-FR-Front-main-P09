@@ -16,27 +16,24 @@ export default class NewBill {
     new Logout({ document, localStorage, onNavigate })
   }
   handleChangeFile = e => {
-    e.preventDefault()
-
-    /** @type {HTMLInputElement} */
-    const inputFile = this.document.querySelector(`input[data-testid="file"]`)
-    const acceptedTypes = ['image/jpeg', 'image/png','image/jpg'];
-
+  
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
-    inputFile.setAttribute('data-error', '')
-    inputFile.setAttribute('data-error-visible', 'false')
-
-    const filePath = e.target.value.split(/\\/g)
-    const fileName = filePath[filePath.length-1]
-
-    const formData = new FormData()
-    const email = JSON.parse(localStorage.getItem("user")).email
-    formData.append('file', file)
-    formData.append('email', email)
-    if (acceptedTypes.includes(file.type)) {
-      console.log('Fichier accepté. Type de fichier:', file.type);
-      console.log(file.type);
-    this.store
+    const fileInput = this.document.querySelector(`input[data-testid="file"]`)
+      // Liste des types de fichiers acceptés
+      const acceptedTypes = ['image/jpeg', 'image/png','image/jpg'];
+      // Vérifier si le type de fichier est accepté
+      if (acceptedTypes.includes(file.type)) {
+        fileInput.setAttribute('data-error', '')
+        fileInput.setAttribute('data-error-visible', 'false')
+        console.log('Fichier accepté. Type de fichier:', file.type);
+        const filePath = e.target.value.split(/\\/g)
+        const fileName = filePath[filePath.length-1]
+        const formData = new FormData()
+        const email = JSON.parse(localStorage.getItem("user")).email
+        formData.append('file', file)
+        formData.append('email', email)
+        console.log(fileInput);
+        this.store
       .bills()
       .create({
         data: formData,
@@ -44,18 +41,18 @@ export default class NewBill {
           noContentType: true
         }
       })
+      .catch(error => console.error(error))
       .then(({fileUrl, key}) => {
-        console.log(fileUrl)
         this.billId = key
         this.fileUrl = fileUrl
         this.fileName = fileName
-      }).catch(error => console.error(error))}
-      else{
-        inputFile.setAttribute('data-error', 'Le fichier n\'est pas une image ou a une extension non autorisée.')
-        inputFile.setAttribute('data-error-visible', 'true')
+      }).catch(error => console.error(error))
+      } else {
         console.log('Type de fichier non pris en charge. Veuillez sélectionner un fichier JPEG ou PNG.');
-        inputFile.value=""
-        return;
+        fileInput.setAttribute('data-error', 'Le fichier n\'est pas une image ou a une extension non autorisée.')
+        fileInput.setAttribute('data-error-visible', 'true')
+        // Ajoutez ici le code pour informer l'utilisateur du type de fichier non pris en charge
+        fileInput.value = ""
       }
   }
   handleSubmit = e => {
@@ -75,7 +72,10 @@ export default class NewBill {
       fileName: this.fileName,
       status: 'pending'
     }
+    console.log(bill);
+
     this.updateBill(bill)
+    
     this.onNavigate(ROUTES_PATH['Bills'])
   }
 
