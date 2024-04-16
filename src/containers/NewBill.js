@@ -51,7 +51,6 @@ export default class NewBill {
         console.log('Type de fichier non pris en charge. Veuillez sélectionner un fichier JPEG ou PNG.');
         fileInput.setAttribute('data-error', 'Le fichier n\'est pas une image ou a une extension non autorisée.')
         fileInput.setAttribute('data-error-visible', 'true')
-        // Ajoutez ici le code pour informer l'utilisateur du type de fichier non pris en charge
         fileInput.value = ""
       }
   }
